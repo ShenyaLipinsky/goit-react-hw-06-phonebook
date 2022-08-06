@@ -2,24 +2,12 @@ import { Box } from './Box';
 import { ContactForm } from './Phonebook/Phonebook';
 import { Contacts } from './Contacts/Contacts';
 import { Filter } from './Filter/Filter';
-import { useState } from 'react';
-import { useEffect } from 'react';
-
-const LS_KEY = 'contacts';
+import { useSelector } from 'react-redux';
+import { getContacts, getFilter } from 'redux/contactsSlice';
 
 export const App = () => {
-  const [contacts, setContacts] = useState(() => {
-    return JSON.parse(localStorage.getItem(LS_KEY)) ?? [];
-  });
-  const [filter, setFilter] = useState('');
-
-  useEffect(() => {
-    localStorage.setItem(LS_KEY, JSON.stringify(contacts));
-  }, [contacts]);
-
-  const handleChange = evt => {
-    setFilter(evt.target.value);
-  };
+  let contacts = useSelector(getContacts);
+  let filter = useSelector(getFilter);
 
   const filterItems = (arr, query) => {
     if (arr.length !== 0 || null) {
@@ -29,28 +17,6 @@ export const App = () => {
       return newArray;
     }
     return;
-  };
-
-  const addContact = values => {
-    setContacts(prevContacts => {
-      if (
-        prevContacts.find(
-          contact => contact.name.toLowerCase() === values.name.toLowerCase()
-        )
-      ) {
-        alert(`${values.name} is already in contacts.`);
-        return [...prevContacts];
-      }
-      return [...prevContacts, values];
-    });
-  };
-
-  const removeContact = id => {
-    setContacts(prevState => {
-      console.log(prevState);
-
-      return prevState.filter(el => el.id !== id);
-    });
   };
 
   return (
@@ -67,19 +33,12 @@ export const App = () => {
       bg={'secondary'}
     >
       <h1>PhoneBook</h1>
-      <ContactForm onAddContact={addContact}></ContactForm>
+      <ContactForm></ContactForm>
       {contacts.length > 0 && (
         <>
           <h2>Contacts</h2>
-          <Filter
-            title="Find contacts by name"
-            value={filter}
-            filterText={handleChange}
-          />
-          <Contacts
-            contacts={filterItems(contacts, filter)}
-            onRemoveContact={removeContact}
-          />
+          <Filter title="Find contacts by name" value={filter} />
+          <Contacts contacts={filterItems(contacts, filter)} />
         </>
       )}
     </Box>

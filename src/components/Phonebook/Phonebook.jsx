@@ -1,4 +1,3 @@
-import propTypes from 'prop-types';
 import {
   PhonebookForm,
   PhonebookLabel,
@@ -7,8 +6,11 @@ import {
 } from './Phonebook.styled';
 import { nanoid } from 'nanoid';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { addContact } from 'redux/contactsSlice';
 
-export const ContactForm = ({ onAddContact }) => {
+export const ContactForm = () => {
+  const dispatch = useDispatch();
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
 
@@ -28,7 +30,7 @@ export const ContactForm = ({ onAddContact }) => {
   };
   const handleSubmit = e => {
     e.preventDefault();
-    onAddContact({ name: name, number: number, id: nanoid(10) });
+    dispatch(addContact({ name: name, number: number, id: nanoid(10) }));
     reset();
   };
 
@@ -66,8 +68,4 @@ export const ContactForm = ({ onAddContact }) => {
       <PhonebookBtn type="submit">Add Contact</PhonebookBtn>
     </PhonebookForm>
   );
-};
-
-ContactForm.propTypes = {
-  onAddContact: propTypes.func.isRequired,
 };

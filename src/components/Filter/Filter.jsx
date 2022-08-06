@@ -1,7 +1,11 @@
 import propTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
+import { filter } from 'redux/contactsSlice';
 import { FilterLabel, FilterInput, FilterForm } from './Filter.styled';
 
-export const Filter = ({ title, value, filterText }) => {
+export const Filter = ({ title, value }) => {
+  const dispatch = useDispatch();
+
   return (
     <>
       <FilterForm autoComplete="off">
@@ -11,7 +15,9 @@ export const Filter = ({ title, value, filterText }) => {
             type="text"
             name="filter"
             value={value}
-            onChange={filterText}
+            onChange={e => {
+              dispatch(filter(e.target.value));
+            }}
           />
         </FilterLabel>
       </FilterForm>
@@ -22,5 +28,4 @@ export const Filter = ({ title, value, filterText }) => {
 Filter.propTypes = {
   title: propTypes.string,
   value: propTypes.string.isRequired,
-  filterText: propTypes.func.isRequired,
 };

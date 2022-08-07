@@ -12,17 +12,7 @@ const contactsSlice = createSlice({
   initialState,
   reducers: {
     addContact: (state, action) => {
-      if (
-        state.items.find(
-          contact =>
-            contact.name.toLowerCase() === action.payload.name.toLowerCase()
-        )
-      ) {
-        alert(`${action.payload.name} is already in contacts.`);
-        return state;
-      } else {
-        state.items.push(action.payload);
-      }
+      state.items.push(action.payload);
     },
     removeContact: (state, action) => {
       state.items = state.items.filter(el => el.id !== action.payload);
